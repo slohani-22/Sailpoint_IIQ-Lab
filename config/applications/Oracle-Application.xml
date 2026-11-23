@@ -1,0 +1,155 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Application PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Application connector="sailpoint.connector.OracleDBConnector" featuresString="DISCOVER_SCHEMA, PROVISIONING, SYNC_PROVISIONING, AUTHENTICATE, PASSWORD, ENABLE, SEARCH, DIRECT_PERMISSIONS" icon="databaseIcon" name="Oracle Application" profileClass="spadmin" type="Oracle Database - Direct">
+  <Attributes>
+    <Map>
+      <entry key="acctAggregationEnd">
+        <value>
+          <Date>1793678282124</Date>
+        </value>
+      </entry>
+      <entry key="acctAggregationStart">
+        <value>
+          <Date>1793678277287</Date>
+        </value>
+      </entry>
+      <entry key="additionalConnProperties"/>
+      <entry key="afterProvisioningRule"/>
+      <entry key="beforeProvisioningRule"/>
+      <entry key="chunkToFetch">
+        <value>
+          <Integer>1000</Integer>
+        </value>
+      </entry>
+      <entry key="compositeDefinition"/>
+      <entry key="deleteUserOnCascade">
+        <value>
+          <Boolean></Boolean>
+        </value>
+      </entry>
+      <entry key="driverClass" value="oracle.jdbc.driver.OracleDriver"/>
+      <entry key="enforceRequiredPermission">
+        <value>
+          <Boolean>true</Boolean>
+        </value>
+      </entry>
+      <entry key="nativeChangeDetectionAttributeScope" value="entitlements"/>
+      <entry key="nativeChangeDetectionAttributes"/>
+      <entry key="nativeChangeDetectionEnabled">
+        <value>
+          <Boolean></Boolean>
+        </value>
+      </entry>
+      <entry key="nativeChangeDetectionOperations"/>
+      <entry key="password" value="CHANGE_ME"/>
+      <entry key="sysDescriptions">
+        <value>
+          <Map>
+            <entry key="en_US"/>
+          </Map>
+        </value>
+      </entry>
+      <entry key="templateApplication" value="Oracle Template"/>
+      <entry key="url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+      <entry key="useExecuteQuery">
+        <value>
+          <Boolean>true</Boolean>
+        </value>
+      </entry>
+      <entry key="user" value="CHANGE_ME"/>
+    </Map>
+  </Attributes>
+  <Owner>
+    <Reference class="sailpoint.object.Identity" name="spadmin"/>
+  </Owner>
+  <ProvisioningForms>
+    <Form name="Create User" objectType="account" type="Create">
+      <Attributes>
+        <Map>
+          <entry key="pageTitle" value="Create User"/>
+        </Map>
+      </Attributes>
+      <Section>
+        <Field displayName="con_prov_policy_oracle_user_name" helpKey="help_con_form_oracle_username" name="USERNAME" required="true" reviewRequired="true" type="string"/>
+        <Field displayName="con_prov_policy_oracle_Password" helpKey="help_con_form_oracle_password" name="password" required="true" reviewRequired="true" type="secret"/>
+        <Field displayName="con_prov_policy_oracle_Default_Tablespace" helpKey="help_con_form_oracle_Default_Tablespace" name="DEFAULT_TABLESPACE" reviewRequired="true" type="string"/>
+        <Field displayName="con_prov_policy_oracle_Temporary_Tablespace" helpKey="help_con_form_oracle_Temporary_Tablespace" name="TEMPORARY_TABLESPACE" reviewRequired="true" type="string"/>
+        <Field displayName="con_prov_policy_oracle_Profile" helpKey="help_con_form_oracle_Profile" name="PROFILE" reviewRequired="true" type="string"/>
+      </Section>
+    </Form>
+    <Form name="Create Group" objectType="group" type="Create">
+      <Attributes>
+        <Map>
+          <entry key="pageTitle" value="Create Group"/>
+        </Map>
+      </Attributes>
+      <Section>
+        <Field displayName="con_prov_policy_oracle_Role" helpKey="help_con_form_oracle_Role" name="ROLE" required="true" reviewRequired="true" type="string"/>
+        <Field displayName="con_prov_policy_oracle_Password" helpKey="help_con_form_oracle_password_role" name="password" reviewRequired="true" type="secret"/>
+      </Section>
+    </Form>
+    <Form name="Update Group" objectType="group" type="Update">
+      <Attributes>
+        <Map>
+          <entry key="pageTitle" value="Update Group"/>
+        </Map>
+      </Attributes>
+      <Section>
+        <Field displayName="con_prov_policy_oracle_Granted_Roles" helpKey="help_con_form_oracle_Role_Name" multi="true" name="ROLES" reviewRequired="true" type="string"/>
+        <Field displayName="con_prov_policy_oracle_System_Privileges" helpKey="help_con_form_oracle_System_Privileges" multi="true" name="SYSTEM_PRIVILEGES" reviewRequired="true" type="string"/>
+        <Field displayName="con_prov_policy_oracle_Password" helpKey="help_con_form_oracle_password_role" name="password" reviewRequired="true" type="secret"/>
+      </Section>
+    </Form>
+  </ProvisioningForms>
+  <Schemas>
+    <Schema displayAttribute="USERNAME" identityAttribute="USERNAME" instanceAttribute="" nativeObjectType="DBA_USERS" objectType="account" permissionsRemediationModificationType="None">
+      <AttributeDefinition name="USERNAME" remediationModificationType="None" type="string">
+        <Description>User name </Description>
+      </AttributeDefinition>
+      <AttributeDefinition name="USER_ID" remediationModificationType="None" type="string">
+        <Description>User ID </Description>
+      </AttributeDefinition>
+      <AttributeDefinition name="ACCOUNT_STATUS" remediationModificationType="None" type="string">
+        <Description>Account status </Description>
+      </AttributeDefinition>
+      <AttributeDefinition name="DEFAULT_TABLESPACE" remediationModificationType="None" type="string">
+        <Description>Default tablespace </Description>
+      </AttributeDefinition>
+      <AttributeDefinition name="TEMPORARY_TABLESPACE" remediationModificationType="None" type="string">
+        <Description>Temporary tablespace </Description>
+      </AttributeDefinition>
+      <AttributeDefinition name="AUTHENTICATION_TYPE" remediationModificationType="None" required="true" type="string">
+        <Description>Authentication type </Description>
+      </AttributeDefinition>
+      <AttributeDefinition managed="true" name="PROFILE" remediationModificationType="None" type="string">
+        <Description>Profiles assigned to the user </Description>
+      </AttributeDefinition>
+      <AttributeDefinition entitlement="true" managed="true" multi="true" name="ROLES" remediationModificationType="None" schemaObjectType="group" type="string">
+        <Description>Roles assigned to the user </Description>
+      </AttributeDefinition>
+      <AttributeDefinition entitlement="true" managed="true" multi="true" name="SYSTEM_PRIVILEGES" remediationModificationType="None" type="string">
+        <Description>System privileges assigned to the user </Description>
+      </AttributeDefinition>
+    </Schema>
+    <Schema descriptionAttribute="" displayAttribute="ROLE" featuresString="PROVISIONING" identityAttribute="ROLE" instanceAttribute="" nativeObjectType="DBA_ROLES" objectType="group" permissionsRemediationModificationType="None">
+      <AttributeDefinition name="ROLE" type="string">
+        <Description>Role name </Description>
+      </AttributeDefinition>
+      <AttributeDefinition name="PASSWORD_REQUIRED" remediationModificationType="None" type="string">
+        <Description>Password is required or not </Description>
+      </AttributeDefinition>
+      <AttributeDefinition name="AUTHENTICATION_TYPE" remediationModificationType="None" required="true" type="string">
+        <Description>Authentication type </Description>
+      </AttributeDefinition>
+      <AttributeDefinition entitlement="true" managed="true" multi="true" name="ROLES" remediationModificationType="None" type="string">
+        <Description>Roles assigned to the role </Description>
+      </AttributeDefinition>
+      <AttributeDefinition entitlement="true" managed="true" multi="true" name="SYSTEM_PRIVILEGES" type="string">
+        <Description>System privileges assigned to the role </Description>
+      </AttributeDefinition>
+    </Schema>
+  </Schemas>
+  <ApplicationScorecard/>
+</Application>
+
+

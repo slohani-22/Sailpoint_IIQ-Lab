@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Test Rule 2">
+  <Source>
+  import java.util.*;
+  import sailpoint.object.*;
+  import org.apache.logging.log4j.Logger;
+  import org.apache.logging.log4j.LogManager;
+  Logger log = LogManager.getLogger("loggerDex");
+  log.debug("Hi From Rule.");
+  List identities = context.getObjects(Identity.class);
+  //Identity id = context.getObject(Identity.class);
+  List result = new ArrayList();
+  List res = new ArrayList();
+  for(Identity identity : identities){
+    String email = identity.getEmail();
+    result.add(identity.getName() + " :" + email);
+  }
+  /*  for(Identity identity: identities){
+    String id = identity.getObjectById();
+    res.add(identity.getName() + ":" + id);
+  }
+  return result;
+  */ 
+  
+  log.debug(result);
+  return result;
+    </Source>
+</Rule>
+

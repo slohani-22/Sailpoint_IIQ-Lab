@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Test Rule- Role">
+  <Source>
+import java.util.*;
+import sailpoint.object.*;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
+Logger log = LogManager.getLogger("loggerDex");
+
+
+List rolebundle = context.getObjects(Bundle.class);
+List result = new ArrayList();
+
+
+for (Bundle role : rolebundle) {
+
+   
+    String name = role.getName() + " : " + role.getType();
+
+    result.add(name);
+}
+
+log.debug(result);
+
+return result;
+  </Source>
+</Rule>
+

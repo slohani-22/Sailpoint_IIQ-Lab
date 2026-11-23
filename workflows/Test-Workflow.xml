@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Workflow PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Workflow explicitTransitions="true" name="Test Workflow" type="">
+  <Step icon="Start" name="Start" posX="20" posY="20">
+    <Transition to="Log Printer"/>
+  </Step>
+  <Step icon="Stop" name="Stop" posX="1209" posY="24"/>
+  <Step icon="Default" name="Log Printer" posX="329" posY="31">
+    <Script>
+      <Source>import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+Logger log = LogManager.getLogger("loggerDex");
+log.debug("iHello From Logs.");</Source>
+    </Script>
+    <Transition to="Stop"/>
+  </Step>
+</Workflow>
+

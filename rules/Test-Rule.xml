@@ -1,0 +1,29 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Test Rule">
+  <Source>
+import java.util. *;
+import sailpoint.object. *;
+/*List identities = context.getObjects(Identity.class);
+  //return identities.size();
+  List applications = context.getObjects(Application.class);
+  	return applications.size();
+ */
+ Identity id = context.getObjectByName(Identity.class,"Bob_Fields");
+// String fname = id.getFirstname();
+ //String email = id.getEmail();
+  //return email;
+  //Identity managerID =  id.getManager();
+  //String name = managerID.getName();
+  //return name;
+  List result = new ArrayList();
+  List links = id.getLinks();
+  
+  for( Link l: links){
+    String appName = l.getApplicationName();
+    result.add(appName);
+  }
+    return result;
+  </Source>
+</Rule>
+

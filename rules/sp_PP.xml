@@ -1,0 +1,45 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="sp_PP">
+  <Source>
+
+  import sailpoint.object.ProvisioningPlan;  
+  import sailpoint.object.ProvisioningPlan.AccountRequest;  
+  import sailpoint.object.ProvisioningPlan.AttributeRequest;              
+  import java.util.List;  
+  import java.util.ArrayList; 
+  import sailpoint.object.*;
+  import org.apache.logging.log4j.Logger;
+  import org.apache.logging.log4j.LogManager;
+
+  Logger log = LogManager.getLogger("loggerDex");
+  log.debug("Provisioning Started.");    
+  // Provisioning garne walal plan, k garne ,kata garne, kaslai garne
+  ProvisioningPlan plan = new ProvisioningPlan();      
+
+  Identity identityObject = context.getObjectByName(Identity.class, "A105");  
+  String idenName= identityObject.getName();
+
+  
+
+  log.debug("Employee... Create plan.");                                         
+
+
+  List accreqs = new ArrayList();      
+
+  //create Oracle account  
+  AccountRequest acctReq = new AccountRequest();  
+  acctReq.setOperation(AccountRequest.Operation.Create);  
+  acctReq.setApplication("Oracle application");  
+
+
+
+  accreqs.add(acctReq);  
+  plan.setAccountRequests(accreqs);  
+  plan.setIdentity(identityObject);  
+  log.debug("Plan = " + plan.toXml());  
+
+  return plan;
+  </Source>
+</Rule>
+

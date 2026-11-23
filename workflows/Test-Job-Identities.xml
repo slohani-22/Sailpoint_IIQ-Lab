@@ -1,0 +1,125 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Workflow PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Workflow explicitTransitions="true" name="Test - Job identities">
+  <Variable input="true" name="launcher"/>
+  <Variable initializer="true" name="transient"/>
+  <Variable name="jobtitle"/>
+  <Variable name="names"/>
+  <Variable name="selectedIdentities"/>
+  <Variable name="emails"/>
+  <Step icon="Start" name="Start" posX="20" posY="20">
+    <Script>
+      <Source>import org.apache.logging.log4j.Logger;
+        import org.apache.logging.log4j.LogManager;
+        import sailpoint.object.*;
+
+        Logger log = LogManager.getLogger("loggerDex");
+        log.debug("in Start step.");</Source>
+    </Script>
+    <Transition to="Input Job Title"/>
+  </Step>
+  <Step icon="Default" name="Input Job Title" posX="160" posY="20">
+    <Approval name="Enter Job Title" owner="ref:launcher" return="jobtitle">
+      <Form name="Enter Job Title">
+        <Attributes>
+          <Map>
+            <entry key="pageTitle" value="Enter Job Title"/>
+          </Map>
+        </Attributes>
+        <Section name="Section 1">
+          <Field displayName="Job Title" name="jobtitle" required="true" type="string"/>
+        </Section>
+        <Button action="next" label="Next"/>
+      </Form>
+    </Approval>
+    <Transition to="Find Names"/>
+  </Step>
+  <Step icon="Default" name="Find Names" posX="300" posY="20" resultVariable="names">
+    <Script>
+      <Source>import java.util.*;
+        import sailpoint.object.*;
+
+        QueryOptions qo = new QueryOptions();
+        qo.addFilter(Filter.eq("application.name", "HR Application"));
+        List accounts = context.getObjects(Link.class, qo);
+
+        List names = new ArrayList();
+        for (Link account : accounts) {
+        if (jobtitle.equals(account.getAttribute("jobtitle"))) {
+        names.add(account.getIdentity().getName());
+        }
+        }
+
+        return names;</Source>
+    </Script>
+    <Transition to="List-identity"/>
+  </Step>
+  <Step icon="Default" name="List-identity" posX="440" posY="20">
+    <Approval name="Select Identity" owner="ref:launcher" return="selectedIdentities" send="names">
+      <Form name="Select Identity">
+        <Attributes>
+          <Map>
+            <entry key="pageTitle" value="Select Identity"/>
+          </Map>
+        </Attributes>
+        <Section name="Section 1">
+          <Field displayName="IdentityName" multi="true" name="selectedIdentities" required="true" type="string">
+            <AllowedValuesDefinition>
+              <Script>
+                <Source>return names;</Source>
+              </Script>
+            </AllowedValuesDefinition>
+          </Field>
+        </Section>
+        <Button action="next" label="Next"/>
+      </Form>
+    </Approval>
+    <Transition to="Get Emails"/>
+  </Step>
+  <Step icon="Default" name="Get Emails" posX="580" posY="20" resultVariable="emails">
+    <Script>
+      <Source>import java.util.*;
+        import sailpoint.object.*;
+
+        List picked = new ArrayList();
+        if (selectedIdentities instanceof List) {
+        picked.addAll(selectedIdentities);
+        } else if (selectedIdentities != null) {
+        picked.add(selectedIdentities);
+        }
+
+        List result = new ArrayList();
+        for (String name : picked) {
+        Identity identity = context.getObjectByName(Identity.class, name);
+        if (identity != null) {
+        result.add(name + " : " + identity.getEmail());
+        }
+        }
+
+        return result;</Source>
+    </Script>
+    <Transition to="Output"/>
+  </Step>
+  <Step icon="Default" name="Output" posX="720" posY="20">
+    <Approval name="Show Email" owner="ref:launcher" send="emails">
+      <Form name="Show Email">
+        <Attributes>
+          <Map>
+            <entry key="pageTitle" value="Show Email"/>
+          </Map>
+        </Attributes>
+        <Section name="Section 1">
+          <Field displayName="Email" name="emailText" type="string">
+            <Script>
+              <Source>return String.join(", ", emails);</Source>
+            </Script>
+          </Field>
+        </Section>
+        <Button action="next" label="Done"/>
+      </Form>
+    </Approval>
+    <Transition to="Stop"/>
+  </Step>
+  <Step icon="Stop" name="Stop" posX="860" posY="20"/>
+</Workflow>
+

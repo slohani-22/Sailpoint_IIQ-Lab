@@ -1,0 +1,17 @@
+employeeid,firstname,lastname,fullname,phone,email
+1001,Aarav,Shrestha,Aarav Shrestha,555-0101,aarav.shrestha@example.com
+1002,Sita,Gurung,Sita Gurung,555-0102,sita.gurung@example.com
+1003,Bibek,Thapa,Bibek Thapa,555-0103,bibek.thapa@example.com
+1004,Anjali,Karki,Anjali Karki,555-0104,anjali.karki@example.com
+1005,Rohan,Adhikari,Rohan Adhikari,555-0105,rohan.adhikari@example.com
+1006,Pooja,Rai,Pooja Rai,555-0106,pooja.rai@example.com
+1007,Suman,Tamang,Suman Tamang,555-0107,suman.tamang@example.com
+1008,Nisha,Magar,Nisha Magar,555-0108,nisha.magar@example.com
+1009,Prakash,Bhandari,Prakash Bhandari,555-0109,prakash.bhandari@example.com
+1010,Kriti,Poudel,Kriti Poudel,555-0110,kriti.poudel@example.com
+1011,Dipesh,Koirala,Dipesh Koirala,555-0111,dipesh.koirala@example.com
+1012,Sabina,Lama,Sabina Lama,555-0112,sabina.lama@example.com
+1013,Nabin,Joshi,Nabin Joshi,555-0113,nabin.joshi@example.com
+1014,Asmita,Basnet,Asmita Basnet,555-0114,asmita.basnet@example.com
+1015,Kiran,Sherpa,Kiran Sherpa,555-0115,kiran.sherpa@example.com
+401,Mitchel,Armstrong,Mitch Armstrong,555-0116,mitch.armstrong@acme.com

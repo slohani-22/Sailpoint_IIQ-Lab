@@ -1,0 +1,179 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Workflow PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Workflow explicitTransitions="true" name="DynamicPP-sp48" type="LCMProvisioning">
+  <Variable name="plan"/>
+  <Variable name="identityName"/>
+  <Variable name="name"/>
+  <Variable input="true" name="launcher"/>
+  <Variable name="hasOracleAccount"/>
+  <Step icon="Start" name="Start" posX="20" posY="20">
+    <Transition to="Input Identity"/>
+  </Step>
+  <Step icon="Stop" name="Stop" posX="738" posY="256"/>
+  <Step icon="Default" name="Input Identity" posX="298" posY="19">
+    <Approval name="Input Name" owner="ref:launcher" return="name" send="">
+      <Form name="Input Name">
+        <Attributes>
+          <Map>
+            <entry key="pageTitle" value="Input Name"/>
+          </Map>
+        </Attributes>
+        <Section name="Input Name">
+          <Field displayName="Name" name="name" type="sailpoint.object.Identity"/>
+        </Section>
+        <Button action="next" label="Next"/>
+      </Form>
+    </Approval>
+    <Script>
+      <Source>import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+Logger log = LogManager.getLogger("loggerDex");
+log.debug("in Inputing name step.");</Source>
+    </Script>
+    <Transition to="Check Oracle Account"/>
+  </Step>
+  <Step icon="Default" name="Check Oracle Account" posX="295" posY="263" resultVariable="hasOracleAccount">
+    <Script>
+      <Source>import java.util.*;
+import sailpoint.object.*;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+Logger log = LogManager.getLogger("loggerDex");
+log.debug("Name = " + name);
+log.debug("In Check Oracle Account Step");
+
+Identity idenobject = context.getObject(Identity.class, name);
+
+if (idenobject == null) {
+    log.debug("No identity found for: " + name);
+    return false;
+}
+
+String idenName = idenobject.getName();
+ log.debug(idenName);
+
+
+wfcontext.setVariable("identityName", idenName);
+
+QueryOptions qo = new QueryOptions();
+Filter f1 = Filter.eq("links.application.name", "Oracle Application");
+Filter f2 = Filter.eq("name" , idenName);
+qo.addFilter(f1);
+qo.addFilter(f2);
+
+int count = context.countObjects(Identity.class, qo);
+
+boolean output;
+if (count > 0){
+output = true;
+log.debug("Already has a Oracle Account");
+}
+else{
+output = false;
+log.debug("Creating PP");
+}
+return output;</Source>
+    </Script>
+    <Transition to="Stop" when="return identityName == null;"/>
+    <Transition to="Stop" when="return hasOracleAccount;"/>
+    <Transition to="Create PP"/>
+  </Step>
+  <Step icon="Default" name="Create PP" posX="525" posY="19" resultVariable="plan">
+    <Script>
+      <Source>import sailpoint.object.*;
+import sailpoint.object.ProvisioningPlan;  
+import sailpoint.object.ProvisioningPlan.AccountRequest;  
+import sailpoint.object.ProvisioningPlan.AttributeRequest;   
+           
+import java.util.List;  
+import java.util.ArrayList; 
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
+Logger log = LogManager.getLogger("loggerDex");
+log.debug("Provisioning Started.");    
+
+ProvisioningPlan plan = new ProvisioningPlan(); 
+
+Identity identityObject = context.getObjectByName(Identity.class, identityName);  
+log.debug("Employee... Create plan.");   
+                                      
+List accreqs = new ArrayList();      
+
+AccountRequest acctReq = new AccountRequest();  
+acctReq.setOperation(AccountRequest.Operation.Create);  
+acctReq.setApplication("Oracle Application");  
+
+accreqs.add(acctReq);  
+
+plan.setAccountRequests(accreqs); 
+
+plan.setIdentity(identityObject);  
+
+log.debug("Plan Created");  
+
+return plan;</Source>
+    </Script>
+    <Transition to="PP Provisioning"/>
+  </Step>
+  <Step icon="Default" name="PP Provisioning" posX="738" posY="18">
+    <Arg name="identityEmailTemplate"/>
+    <Arg name="enableRetryRequest"/>
+    <Arg name="securityOfficerElectronicSignature"/>
+    <Arg name="fallbackApprover"/>
+    <Arg name="endOnManualWorkItems"/>
+    <Arg name="userEmailTemplate"/>
+    <Arg name="policiesToCheck"/>
+    <Arg name="project"/>
+    <Arg name="workItemComments"/>
+    <Arg name="identityRequestId"/>
+    <Arg name="approvalSplitPoint"/>
+    <Arg name="source"/>
+    <Arg name="identityDisplayName"/>
+    <Arg name="foregroundProvisioning"/>
+    <Arg name="ownerElectronicSignature"/>
+    <Arg name="batchRequestItemId"/>
+    <Arg name="saveUnmanagedPlan_WithProjectArgument"/>
+    <Arg name="splitPlans"/>
+    <Arg name="doRefresh"/>
+    <Arg name="plan" value="ref:plan"/>
+    <Arg name="flow"/>
+    <Arg name="identityElectronicSignature"/>
+    <Arg name="identityName" value="ref:identityName"/>
+    <Arg name="approvalSet"/>
+    <Arg name="violationReviewDecision"/>
+    <Arg name="filterRejects"/>
+    <Arg name="splitProjects"/>
+    <Arg name="requireCommentsForDenial"/>
+    <Arg name="requesterEmailTemplate"/>
+    <Arg name="approvalEmailTemplate"/>
+    <Arg name="ticketManagementApplication"/>
+    <Arg name="securityOfficerName"/>
+    <Arg name="approvingIdentities"/>
+    <Arg name="managerEmailTemplate"/>
+    <Arg name="ticketId"/>
+    <Arg name="approvalScheme"/>
+    <Arg name="allowRequestsWithViolations"/>
+    <Arg name="workItemPriority"/>
+    <Arg name="managerElectronicSignature"/>
+    <Arg name="requireViolationReviewComments"/>
+    <Arg name="splitApprovalSet"/>
+    <Arg name="approvalMode"/>
+    <Arg name="trace"/>
+    <Arg name="endOnProvisioningForms"/>
+    <Arg name="splitWorkItemComments"/>
+    <Arg name="requireCommentsForApproval"/>
+    <Arg name="notificationScheme"/>
+    <Arg name="policyViolations"/>
+    <Arg name="policyScheme"/>
+    <Arg name="setPreviousApprovalDecisions"/>
+    <Arg name="optimisticProvisioning"/>
+    <Arg name="securityOfficerEmailTemplate"/>
+    <WorkflowRef>
+      <Reference class="sailpoint.object.Workflow" name="LCM Provisioning"/>
+    </WorkflowRef>
+    <Transition to="Stop"/>
+  </Step>
+</Workflow>
+
