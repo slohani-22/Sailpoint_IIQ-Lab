@@ -153,7 +153,7 @@ The IT roles were deliberately built from overlapping Oracle entitlements so I c
 
 **What I saw:** a test identity with job title `dba` was assigned DBA-Business and detected for DBA-IT, as expected. It was **also detected for Compliance-IT and ForwardDeploymentRole**, which nothing had assigned to it.
 
-**Why:** IIQ detects an IT role whenever an account holds all of the role's entitlements. Compliance-IT and ForwardDeploymentRole are both strict subsets of DBA-IT's entitlements, so anyone with DBA access automatically "has" them. MidfieldDeploymentRole was not detected because it includes `DATAPUMP_EXP_FULL_DATABASE`, which DBA-IT does not.
+**Why:** IIQ detects an IT role whenever an account holds all of the IT role's entitlements, no matter how the matching business role is assigned. ForwardDeploymentRole-Business is assigned from the JDBC application (`jobTitle = Forward`), but its IT role, ForwardDeploymentRole, is defined on Oracle entitlements. Both Compliance-IT and ForwardDeploymentRole use Oracle entitlements that are a strict subset of DBA-IT's, so anyone with DBA access is detected for them too. MidfieldDeploymentRole (also assigned from JDBC) was not detected because its Oracle entitlements include `DATAPUMP_EXP_FULL_DATABASE`, which DBA-IT does not have.
 
 **Why it matters:** in a real environment this puts people into access reviews and SoD checks for roles they were never given, which wastes reviewer time and can produce false policy violations.
 
